@@ -1200,57 +1200,318 @@ textarea.form-control { resize: vertical; min-height: 130px; }
 .stagger > *:nth-child(4) { transition-delay: 0.3s; }
 
 /* ══════════════════════════════════════
-   MOBILE RESPONSIVE
+   MOBILE RESPONSIVE — COMPREHENSIVE
+   Mobile-first: 320px → 768px → 1024px+
 ══════════════════════════════════════ */
+
+/* ── 1024px: Tablet ── */
 @media (max-width: 1024px) {
   .about-grid { grid-template-columns: 1fr; gap: 40px; }
   .about-img-wrapper { position: static; }
   .service-detail { grid-template-columns: 1fr; gap: 40px; }
   .service-detail.reverse { direction: ltr; }
-  .hero-stats { position: static; transform: none; flex-direction: row; flex-wrap: wrap; margin-top: 40px; justify-content: flex-start; }
+  .hero-stats {
+    position: static;
+    transform: none;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 40px;
+    justify-content: flex-start;
+    gap: 12px;
+  }
   .stat-pill { min-width: 140px; }
   .grid-3 { grid-template-columns: 1fr 1fr; }
   .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px; }
   .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+  .service-detail { padding: 60px 0; }
 }
 
+/* ── 768px: Mobile ── */
 @media (max-width: 768px) {
-  .section { padding: 70px 0; }
-  .container { padding: 0 18px; }
-  .navbar-links, .navbar-cta .btn:not(:last-child) { display: none; }
+
+  /* Layout */
+  .section { padding: 56px 0; }
+  .section-sm { padding: 44px 0; }
+  .container { padding: 0 16px; }
+  .section-header { margin-bottom: 40px; }
+
+  /* Typography scale-down */
+  .display-xl { font-size: clamp(1.8rem, 8vw, 2.6rem); }
+  .display-lg { font-size: clamp(1.6rem, 7vw, 2.2rem); }
+  .display-md { font-size: clamp(1.3rem, 5vw, 1.8rem); }
+  .section-title { font-size: clamp(1.4rem, 5.5vw, 2rem); }
+  .lead { font-size: 0.95rem; line-height: 1.7; }
+
+  /* ── Navbar ── */
+  .navbar { padding: 14px 0; }
+  .navbar.scrolled { padding: 10px 0; }
+  .navbar-logo { font-size: 1.15rem; }
+  .navbar-links { display: none; }
   .nav-toggle { display: flex; }
   .navbar-cta { gap: 8px; }
-  .grid-2, .grid-3, .grid-4, .portfolio-grid, .pricing-grid { grid-template-columns: 1fr; }
-  .stats-grid { grid-template-columns: 1fr 1fr; }
-  .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
-  .stat-item:nth-child(odd) { border-right: 1px solid var(--border); }
-  .stat-item:last-child { border-bottom: none; }
-  .hero-title { font-size: clamp(2.2rem, 9vw, 3.5rem); }
-  .hero-stats { flex-direction: row; flex-wrap: wrap; }
-  .footer-grid { grid-template-columns: 1fr; gap: 28px; }
-  .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
-  .why-grid { grid-template-columns: 1fr; }
-  .about-floating-badge { position: static; margin-top: 16px; }
-  .mobile-menu-open .navbar-links {
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: var(--black);
-    z-index: 999;
-    align-items: center;
-    justify-content: center;
-    gap: 36px;
-    font-size: 1.3rem;
+  .navbar-cta .btn-gold { padding: 10px 18px; font-size: 0.8rem; }
+
+  /* ── Hero ── */
+  .hero { padding-top: 80px; min-height: 100svh; }
+  .hero > .container > div {
+    flex-direction: column !important;
+    gap: 32px !important;
+    min-height: unset !important;
+    padding: 32px 0 60px !important;
+    align-items: flex-start !important;
   }
-  .mobile-menu-open .nav-close { display: flex; }
+  .hero-content { max-width: 100%; }
+  .hero-title {
+    font-size: clamp(2rem, 9vw, 3rem);
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+  .hero-sub { font-size: 0.95rem; margin-bottom: 28px; max-width: 100%; }
+  .hero-badge { font-size: 0.75rem; padding: 7px 14px; margin-bottom: 20px; }
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-bottom: 36px;
+    width: 100%;
+  }
+  .hero-actions .btn { width: 100%; justify-content: center; }
+  .hero-trust {
+    flex-direction: column;
+    gap: 10px;
+    flex-wrap: nowrap;
+  }
+  .trust-item { font-size: 0.85rem; }
+
+  /* Hero stats — horizontal strip on mobile */
+  .hero-stats {
+    position: static;
+    transform: none;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 0;
+    width: 100%;
+  }
+  .stat-pill {
+    flex: 1 1 calc(50% - 5px);
+    min-width: 0;
+    padding: 14px 16px;
+  }
+  .stat-pill .value { font-size: 1.4rem; }
+  .stat-pill .label { font-size: 0.72rem; }
+  .scroll-cue { display: none; }
+
+  /* ── Stats Strip ── */
+  .stats-strip { padding: 32px 0; }
+  .stats-grid { grid-template-columns: 1fr 1fr; gap: 0; }
+  .stat-item {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 16px 12px;
+  }
+  .stat-item:nth-child(odd) { border-right: 1px solid var(--border); }
+  .stat-item:nth-child(3),
+  .stat-item:nth-child(4) { border-bottom: none; }
+  .stat-item .num { font-size: 1.6rem; }
+  .stat-item .desc { font-size: 0.78rem; }
+
+  /* ── Grids → Single column ── */
+  .grid-2,
+  .grid-3,
+  .grid-4,
+  .portfolio-grid,
+  .pricing-grid { grid-template-columns: 1fr; gap: 16px; }
+
+  /* ── Cards ── */
+  .card { padding: 22px 18px; }
+  .service-card { padding: 24px 20px; }
+  .service-card h3 { font-size: 1.1rem; }
+  .testimonial-card { padding: 24px 20px; }
+  .result-card { padding: 22px 16px; }
+
+  /* ── About preview inline stats ── */
+  .about-grid { grid-template-columns: 1fr; gap: 32px; }
+  .about-img-wrapper { position: static; }
+  .about-floating-badge { position: static; margin-top: 16px; right: 0; }
+  .about-avatar { width: 90px; height: 90px; font-size: 2rem; }
+  .about-name-plate .name { font-size: 1.1rem; }
+  .why-grid { grid-template-columns: 1fr; gap: 12px; }
+  .why-item { padding: 16px; }
+
+  /* ── Page Hero ── */
+  .page-hero { padding: 110px 0 56px; }
+  .page-hero h1 { font-size: clamp(1.6rem, 7vw, 2.4rem); }
+
+  /* ── Services ── */
+  .service-detail {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    padding: 48px 0;
+  }
+  .service-detail.reverse { direction: ltr; }
+  .service-detail-icon { width: 60px; height: 60px; font-size: 1.6rem; margin-bottom: 16px; }
+  .service-detail h2 { font-size: 1.4rem; margin-bottom: 12px; }
+  .benefit-list { gap: 10px; margin-bottom: 24px; }
+  .benefit-item { font-size: 0.88rem; }
+  .service-visual { padding: 24px 18px; }
+  .service-visual-icon { font-size: 3.5rem; margin-bottom: 12px; }
+
+  /* ── Portfolio ── */
+  .portfolio-grid { grid-template-columns: 1fr; gap: 16px; }
+  .portfolio-img { aspect-ratio: 16/9; }
+  .portfolio-info { padding: 18px 20px; }
+  .portfolio-info h3 { font-size: 1rem; }
+  .portfolio-info p { font-size: 0.84rem; }
+
+  /* Before/After */
+  .ba-panels { grid-template-columns: 1fr; }
+  .ba-panel:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+  .ba-metric-row { font-size: 0.82rem; }
+
+  /* ── Pricing ── */
+  .pricing-card { padding: 32px 22px; }
+  .pricing-price .amount { font-size: 2.4rem; }
+  .pricing-feature { font-size: 0.86rem; }
+
+  /* ── Contact ── */
+  .contact-grid { grid-template-columns: 1fr; gap: 32px; }
+  .contact-method { padding: 14px 16px; }
+  .contact-form-wrapper { padding: 24px 18px; }
+  .form-control { padding: 12px 14px; font-size: 0.88rem; }
+
+  /* ── CTA Section ── */
+  .cta-section { padding: 64px 0; }
+  .cta-section .section-title { font-size: clamp(1.4rem, 5.5vw, 2rem); }
+  .cta-section > .container > div > div[style*="display:flex"] {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+  }
+
+  /* ── Footer ── */
+  .footer { padding: 48px 0 24px; }
+  .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+  .footer-bottom {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+    padding-top: 20px;
+  }
+  .footer-brand p { font-size: 0.84rem; max-width: 100%; }
+  .footer-col h4 { font-size: 0.82rem; margin-bottom: 14px; }
+  .footer-col ul { gap: 8px; }
+  .footer-col ul a { font-size: 0.84rem; }
+
+  /* ── WhatsApp Float ── */
+  .whatsapp-float {
+    width: 52px; height: 52px;
+    bottom: 20px; right: 16px;
+  }
+  .whatsapp-float svg { width: 24px; height: 24px; }
+
+  /* ── Inline flex grids from index.html ── */
+  [style*="grid-template-columns:1fr 1fr"],
+  [style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+  [style*="display:grid"][style*="repeat(4"] {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+  }
+  [style*="display:grid"][style*="repeat(3"] {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  [style*="display:flex"][style*="gap:80px"],
+  [style*="gap: 80px"] {
+    flex-direction: column !important;
+    gap: 32px !important;
+  }
+  [style*="display:flex"][style*="gap:48px"] {
+    flex-direction: column !important;
+    gap: 24px !important;
+    align-items: flex-start !important;
+  }
+
+  /* Home page about-preview inline grid */
+  .section > .container > div[style*="grid-template-columns:1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
 }
 
+/* ── 480px: Small phones ── */
 @media (max-width: 480px) {
-  .hero-actions { flex-direction: column; align-items: flex-start; }
-  .hero-trust { flex-direction: column; gap: 12px; }
-  .btn-lg { padding: 16px 32px; }
-  .stat-pill { min-width: calc(50% - 8px); }
+  .container { padding: 0 14px; }
+  .section { padding: 48px 0; }
+
+  /* Typography */
+  .hero-title { font-size: clamp(1.8rem, 9.5vw, 2.4rem); line-height: 1.1; }
+  .section-title { font-size: clamp(1.3rem, 6vw, 1.7rem); }
+  .lead { font-size: 0.9rem; }
+
+  /* Buttons — full width on tiny screens */
+  .hero-actions .btn { padding: 14px 20px; font-size: 0.88rem; }
+  .btn-lg { padding: 14px 24px; font-size: 0.92rem; }
+  .btn-sm { padding: 9px 16px; font-size: 0.8rem; }
+
+  /* Stat pills — 2 per row */
+  .stat-pill { flex: 1 1 calc(50% - 5px); padding: 12px 12px; }
+  .stat-pill .value { font-size: 1.25rem; }
+
+  /* Hero badge */
+  .hero-badge { font-size: 0.72rem; padding: 6px 12px; }
+
+  /* Cards */
+  .card { padding: 18px 14px; border-radius: 12px; }
+  .service-card { padding: 20px 16px; border-radius: 12px; }
+  .pricing-card { padding: 28px 18px; }
+  .testimonial-card { padding: 20px 16px; }
+
+  /* Pricing amounts */
+  .pricing-price .amount { font-size: 2rem; }
+  .pricing-name { font-size: 1.15rem; }
+
+  /* Page hero */
+  .page-hero { padding: 100px 0 48px; }
+
+  /* About avatar smaller */
+  .about-avatar { width: 80px; height: 80px; font-size: 1.8rem; }
+
+  /* Service icons */
+  .service-icon { width: 50px; height: 50px; font-size: 1.3rem; margin-bottom: 16px; }
+  .service-detail-icon { width: 50px; height: 50px; font-size: 1.4rem; }
+
+  /* CTA buttons inline → stacked */
+  .cta-section [style*="display:flex"] {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+  }
+  .cta-section .btn { width: 100% !important; justify-content: center; }
+
+  /* Portfolio */
+  .portfolio-info { padding: 14px 16px; }
+  .portfolio-info h3 { font-size: 0.95rem; }
+
+  /* Footer socials */
+  .footer-socials { gap: 8px; }
+  .social-btn { width: 34px; height: 34px; }
+
+  /* WhatsApp narrower */
+  .whatsapp-float { bottom: 16px; right: 14px; width: 48px; height: 48px; }
+}
+
+/* ── 360px: Very small (older Android) ── */
+@media (max-width: 360px) {
+  .container { padding: 0 12px; }
+  .hero-title { font-size: 1.7rem; }
+  .section-title { font-size: 1.25rem; }
+  .navbar-logo { font-size: 1.05rem; }
+  .navbar-cta .btn-gold { padding: 8px 14px; font-size: 0.75rem; }
+  .stat-pill { flex: 1 1 100%; }
+  .pricing-price .amount { font-size: 1.8rem; }
 }
 
 /* ══════════════════════════════════════

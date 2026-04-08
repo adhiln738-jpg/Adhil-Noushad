@@ -5,6 +5,10 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+  // Detect mobile/touch device — disable heavy effects
+  const isMobile = () => window.innerWidth <= 768 || ('ontouchstart' in window);
+
+
   // ─────────────────────────────────────────
   // 1. NAVBAR — scroll behaviour + active link
   // ─────────────────────────────────────────
@@ -209,12 +213,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // ─────────────────────────────────────────
-  // 6. HERO PARALLAX (subtle, performance-safe)
+  // 6. HERO PARALLAX (desktop-only for performance)
   // ─────────────────────────────────────────
   const heroBg = document.querySelector('.hero-bg');
   const heroGrid = document.querySelector('.hero-grid');
 
-  if (heroBg && heroGrid) {
+  if (heroBg && heroGrid && !isMobile()) {
     let ticking = false;
     window.addEventListener('scroll', () => {
       if (!ticking) {
@@ -274,26 +278,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // ─────────────────────────────────────────
-  // 8. CARD TILT EFFECT (subtle 3D on hover)
+  // 8. CARD TILT EFFECT (desktop only — no mobile lag)
   // ─────────────────────────────────────────
-  const tiltCards = document.querySelectorAll('.service-card, .pricing-card, .portfolio-card');
-
-  tiltCards.forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-      const rect   = card.getBoundingClientRect();
-      const x      = e.clientX - rect.left;
-      const y      = e.clientY - rect.top;
-      const cx     = rect.width  / 2;
-      const cy     = rect.height / 2;
-      const rotateX = ((y - cy) / cy) * -4;
-      const rotateY = ((x - cx) / cx) *  4;
-      card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+  if (!isMobile()) {
+    const tiltCards = document.querySelectorAll('.service-card, .pricing-card, .portfolio-card');
+    tiltCards.forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect   = card.getBoundingClientRect();
+        const x      = e.clientX - rect.left;
+        const y      = e.clientY - rect.top;
+        const cx     = rect.width  / 2;
+        const cy     = rect.height / 2;
+        const rotateX = ((y - cy) / cy) * -4;
+        const rotateY = ((x - cx) / cx) *  4;
+        card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+      });
     });
-
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = '';
-    });
-  });
+  }
 
 
   // ─────────────────────────────────────────
@@ -370,36 +374,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // ─────────────────────────────────────────
-  // 14. GOLD CURSOR TRAIL (subtle premium touch)
+  // 14. GOLD CURSOR TRAIL (desktop only)
   // ─────────────────────────────────────────
-  const trail = document.createElement('div');
-  trail.style.cssText = `
-    position: fixed;
-    pointer-events: none;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: rgba(201,168,76,0.6);
-    transform: translate(-50%,-50%);
-    transition: left 0.12s ease, top 0.12s ease, opacity 0.3s;
-    z-index: 9999;
-    opacity: 0;
-  `;
-  document.body.appendChild(trail);
-
-  let trailVisible = false;
-  document.addEventListener('mousemove', (e) => {
-    trail.style.left    = e.clientX + 'px';
-    trail.style.top     = e.clientY + 'px';
-    trail.style.opacity = '0.65';
-    if (!trailVisible) {
-      trailVisible = true;
-    }
-    clearTimeout(trail._timer);
-    trail._timer = setTimeout(() => {
-      trail.style.opacity = '0';
-    }, 900);
-  });
+  if (!isMobile()) {
+    const trail = document.createElement('div');
+    trail.style.cssText = `
+      position: fixed;
+      pointer-events: none;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(201,168,76,0.6);
+      transform: translate(-50%,-50%);
+      transition: left 0.12s ease, top 0.12s ease, opacity 0.3s;
+      z-index: 9999;
+      opacity: 0;
+    `;
+    document.body.appendChild(trail);
+    document.addEventListener('mousemove', (e) => {
+      trail.style.left    = e.clientX + 'px';
+      trail.style.top     = e.clientY + 'px';
+      trail.style.opacity = '0.65';
+      clearTimeout(trail._timer);
+      trail._timer = setTimeout(() => { trail.style.opacity = '0'; }, 900);
+    });
+  }
 
 
   // ─────────────────────────────────────────

@@ -1,0 +1,483 @@
+import os
+
+HEADER = """<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content="{desc}" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%232563eb'/><text y='65' x='20' font-size='60' fill='white' font-family='sans-serif' font-weight='bold'>Tr</text></svg>" />
+</head>
+<body>
+
+<!-- ══ NAVBAR ══ -->
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <div class="navbar-inner">
+      <a href="index.html" class="navbar-logo">Tronx<span>.</span></a>
+      <ul class="navbar-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="portfolio.html">Case Studies</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="navbar-cta">
+        <a href="contact.html" class="btn btn-gold btn-sm">Get Consultation</a>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Overlay -->
+<div class="mobile-nav-overlay" id="mobileNav">
+  <ul class="navbar-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="portfolio.html">Case Studies</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="contact.html" class="btn btn-gold" style="margin-top:8px;">Get Consultation</a></li>
+  </ul>
+  <button class="mobile-close" id="mobileClose">✕</button>
+</div>
+"""
+
+FOOTER = """
+<!-- ══ CTA SECTION ══ -->
+<section class="cta-section">
+  <div class="container">
+    <div class="reveal">
+      <h2 class="section-title" style="margin-bottom:16px;">Ready to Scale Your E-commerce Business?</h2>
+      <div class="urgency-badge" style="margin-top:20px; display:inline-flex;"><span class="urgency-dot"></span> Limited client slots available</div>
+      <div style="display:flex;justify-content:center;gap:16px;margin-top:40px;flex-wrap:wrap;">
+        <a href="https://wa.me/917356567770" class="btn btn-gold btn-lg">
+          WhatsApp Now
+        </a>
+        <a href="contact.html" class="btn btn-outline btn-lg" style="border-color:rgba(0,0,0,0.15); color:var(--text);">
+          Book Free Consultation
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">Tronx<span>.</span></div>
+        <p>A high-performance e-commerce growth agency specializing in Shopify store development, Meta Ads, and social media management.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-btn" aria-label="Instagram">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </a>
+          <a href="#" class="social-btn" aria-label="LinkedIn">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+          <a href="https://wa.me/917356567770" class="social-btn" aria-label="WhatsApp">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</a>
+
+<script src="main.js"></script>
+</body>
+</html>
+"""
+
+PAGES = {
+    "about.html": {
+        "title": "About Us — Tronx Agency",
+        "desc": "Learn about Tronx Agency, the e-commerce growth experts helping brands scale through Shopify and Meta Ads.",
+        "content": """
+<section class="page-hero">
+  <div class="container">
+    <div class="hero-badge reveal" style="margin:0 auto 20px;"><span class="dot"></span> E-commerce Experts</div>
+    <h1 class="display-lg reveal" style="transition-delay:0.1s;">About Tronx Agency</h1>
+    <p class="lead reveal" style="margin:20px auto 0; max-width:600px; transition-delay:0.2s;">
+      We are an elite team of strategists, developers, and media buyers dedicated to scaling your e-commerce brand.
+    </p>
+  </div>
+</section>
+<section class="section" style="padding-top:0;">
+  <div class="container-sm">
+    <div class="card reveal" style="padding:60px; margin-bottom:60px;">
+      <h2 style="font-size:2rem; font-weight:700; margin-bottom:24px;">Our Mission</h2>
+      <p style="color:var(--muted); font-size:1.05rem; line-height:1.8; margin-bottom:24px;">
+        At Tronx Agency, we don't just build websites; we engineer sales machines. E-commerce is highly competitive, and standing out requires a unified approach combining premium branding, data-driven advertising, and high-converting UX.
+      </p>
+      <p style="color:var(--muted); font-size:1.05rem; line-height:1.8;">
+        Our unified focus allows our partners to step back from the confusing technicalities and focus strictly on product and vision, while we handle the engine that drives revenue.
+      </p>
+    </div>
+    
+    <h2 class="section-title reveal" style="text-align:center; margin-bottom:40px;">Why Choose Us?</h2>
+    <div class="why-grid stagger">
+      <div class="why-item reveal">
+        <div class="icon">🎯</div>
+        <h4>Conversion-Focused</h4>
+        <p>Every element we design and every ad we run is optimized to maximize your return on ad spend.</p>
+      </div>
+      <div class="why-item reveal">
+        <div class="icon">💎</div>
+        <h4>Premium Quality</h4>
+        <p>We craft high-end Shopify stores with modern UI that build immediate trust with your customers.</p>
+      </div>
+      <div class="why-item reveal">
+        <div class="icon">📊</div>
+        <h4>Data-Driven</h4>
+        <p>Decisions backed by analytics. We constantly iterate strategies based on real market feedback.</p>
+      </div>
+      <div class="why-item reveal">
+        <div class="icon">🤝</div>
+        <h4>True Partnership</h4>
+        <p>We treat your business as our own, managing operations efficiently so you can scale seamlessly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+"""
+    },
+    "services.html": {
+        "title": "Services — Tronx Agency",
+        "desc": "High-performance services including Shopify Development, Meta Ads, and Social Media Management.",
+        "content": """
+<section class="page-hero">
+  <div class="container">
+    <h1 class="display-lg reveal">Services Built to Scale</h1>
+    <p class="lead reveal" style="margin:20px auto 0; max-width:600px; transition-delay:0.1s;">
+      End-to-end e-commerce solutions tailored for maximum conversions and growth.
+    </p>
+  </div>
+</section>
+<section class="section" style="padding-top:0;">
+  <div class="container">
+    
+    <!-- Service 1 -->
+    <div class="service-detail reveal">
+      <div>
+        <div class="service-detail-icon">🛒</div>
+        <h2>Shopify Store Development</h2>
+        <p>A premium online presence is the foundation of any scalable brand. We build custom, high-converting Shopify stores focusing on speed, mobile-first design, and seamless checkout processes.</p>
+        <div class="benefit-list">
+          <div class="benefit-item">
+            <div class="check-icon">✓</div>
+            <div>High-converting, bespoke design to match your brand identity</div>
+          </div>
+          <div class="benefit-item">
+            <div class="check-icon">✓</div>
+            <div>Mobile-first UX designed for thumb-friendly shopping</div>
+          </div>
+          <div class="benefit-item">
+            <div class="check-icon">✓</div>
+            <div>Extremely fast loading speeds across all devices</div>
+          </div>
+        </div>
+      </div>
+      <div class="service-visual">
+        <div class="service-visual-icon">🚀</div>
+        <h3>More Conversions & Sales</h3>
+        <p style="font-size:0.9rem; color:var(--muted); margin-top:10px;">Our stores are engineered to turn browsers into buyers effortlessly.</p>
+      </div>
+    </div>
+
+    <!-- Service 2 -->
+    <div class="service-detail reverse reveal">
+      <div>
+        <div class="service-detail-icon">📣</div>
+        <h2>Meta Ads Management</h2>
+        <p>Stop burning ad spend. We implement aggressive, data-driven Facebook and Instagram ad campaigns focusing exclusively on achieving the highest Return on Ad Spend (ROAS) possible.</p>
+        <div class="benefit-list">
+          <div class="benefit-item">
+            <div class="check-icon">✓</div>
+            <div>Strategic product testing to find winning audiences</div>
+          </div>
+          <div class="benefit-item">
+            <div class="check-icon">✓</div>
+            <div>Constant creative iteration for lower CPCs</div>
+          </div>
+          <div class="benefit-item">
+            <div class="check-icon">✓</div>
+            <div>Vertical scaling of high-ROAS campaigns</div>
+          </div>
+        </div>
+      </div>
+      <div class="service-visual">
+        <div class="service-visual-icon">📈</div>
+        <h3>Profitable Growth</h3>
+        <p style="font-size:0.9rem; color:var(--muted); margin-top:10px;">Predictable customer acquisition at profitable margins.</p>
+      </div>
+    </div>
+
+    <!-- Service 3 -->
+    <div class="service-detail reveal">
+      <div>
+        <div class="service-detail-icon">📲</div>
+        <h2>Social Media Management</h2>
+        <p>We build organic communities and strong brand presence by creating and distributing highly engaging, viral-ready content tailored to your target demographic.</p>
+        <div class="benefit-list">
+          <div class="benefit-item">
+            <div class="check-icon">✓</div>
+            <div>Comprehensive content strategy and calendar</div>
+          </div>
+          <div class="benefit-item">
+            <div class="check-icon">✓</div>
+            <div>High-quality daily posting across core platforms</div>
+          </div>
+          <div class="benefit-item">
+            <div class="check-icon">✓</div>
+            <div>Community building and engagement tracking</div>
+          </div>
+        </div>
+      </div>
+      <div class="service-visual">
+        <div class="service-visual-icon">🌟</div>
+        <h3>Strong Online Presence</h3>
+        <p style="font-size:0.9rem; color:var(--muted); margin-top:10px;">Establishes immense brand trust and drives organic sales continuously.</p>
+      </div>
+    </div>
+
+    <!-- Service 4 -->
+    <div class="service-detail reverse reveal">
+      <div>
+        <div class="service-detail-icon">📦</div>
+        <h2>Shopify Store Management</h2>
+        <p>Focus on your product while we handle the daily grind. We provide complete backend store management to keep operations smooth and optimized.</p>
+        <div class="benefit-list">
+          <div class="benefit-item">
+            <div class="check-icon">✓</div>
+            <div>Timely product uploads and inventory syncing</div>
+          </div>
+          <div class="benefit-item">
+            <div class="check-icon">✓</div>
+            <div>Efficient order routing and processing</div>
+          </div>
+          <div class="benefit-item">
+            <div class="check-icon">✓</div>
+            <div>Ongoing technical optimization and updates</div>
+          </div>
+        </div>
+      </div>
+      <div class="service-visual">
+        <div class="service-visual-icon">⚙️</div>
+        <h3>Hands-free Business</h3>
+        <p style="font-size:0.9rem; color:var(--muted); margin-top:10px;">A seamless back-end giving you the freedom to scale.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+"""
+    },
+    "portfolio.html": {
+        "title": "Case Studies — Tronx Agency",
+        "desc": "View the proven e-commerce growth strategies and results developed by Tronx Agency.",
+        "content": """
+<section class="page-hero">
+  <div class="container">
+    <h1 class="display-lg reveal">Our Case Studies</h1>
+    <p class="lead reveal" style="margin:20px auto 0; max-width:600px; transition-delay:0.1s;">
+      Real numbers, real brands, real growth. See how we've helped e-commerce businesses dominate their niches.
+    </p>
+  </div>
+</section>
+<section class="section" style="padding-top:0;">
+  <div class="container">
+    <div class="portfolio-grid stagger">
+      <!-- Case Study 1 -->
+      <a href="#" class="portfolio-card reveal">
+        <div class="portfolio-img">
+          <div style="background:#e2e8f0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:600;font-size:1.2rem;">Shopify UI Redesign (Before/After Demo)</div>
+          <div class="portfolio-overlay"></div>
+          <div class="portfolio-tags">
+            <span class="portfolio-tag">Shopify</span>
+            <span class="portfolio-tag">Meta Ads</span>
+          </div>
+        </div>
+        <div class="portfolio-info">
+          <h3>Fashion Label Scaling</h3>
+          <p>Complete store redesign and aggressively scaled Meta Ads to hit unprecedented monthly revenue targets.</p>
+          <div class="portfolio-meta">
+            <div class="portfolio-result">4.2x ROAS | 3.5% CVR</div>
+            <span class="portfolio-link">View Case Study →</span>
+          </div>
+        </div>
+      </a>
+      <!-- Case Study 2 -->
+      <a href="#" class="portfolio-card reveal">
+        <div class="portfolio-img">
+          <div style="background:#f1f5f9;display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:600;font-size:1.2rem;">Meta Ads Dashboard (Demo)</div>
+          <div class="portfolio-overlay"></div>
+          <div class="portfolio-tags">
+            <span class="portfolio-tag">Meta Ads</span>
+          </div>
+        </div>
+        <div class="portfolio-info">
+          <h3>Athleisure Brand </h3>
+          <p>Taken from $100/day ad spend to $1000/day while maintaining high profit margins through structured testing.</p>
+          <div class="portfolio-meta">
+            <div class="portfolio-result">5.1x ROAS | ₹4.8L/mo</div>
+            <span class="portfolio-link">View Case Study →</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+"""
+    },
+    "pricing.html": {
+        "title": "Pricing — Tronx Agency",
+        "desc": "Clear, upfront pricing for Shopify development, Meta Ads, and Social Media Management.",
+        "content": """
+<section class="page-hero">
+  <div class="container">
+    <h1 class="display-lg reveal">Investment Plans</h1>
+    <p class="lead reveal" style="margin:20px auto 0; max-width:600px; transition-delay:0.1s;">
+      Straightforward pricing. No hidden fees. Select the service you need to scale.
+    </p>
+  </div>
+</section>
+<section class="section" style="padding-top:0;">
+  <div class="container">
+    <div class="pricing-grid stagger">
+      <!-- Plan 1 -->
+      <div class="pricing-card reveal">
+        <div class="pricing-plan">Development</div>
+        <h3 class="pricing-name">Shopify Website</h3>
+        <div class="pricing-price">
+          <span class="currency">₹</span>
+          <span class="amount">1999</span>
+          <span class="period">+</span>
+        </div>
+        <p class="pricing-desc">Premium, high-converting store setup.</p>
+        <div class="pricing-features">
+          <div class="pricing-feature"><span class="tick">✓</span> Premium UI/UX Design</div>
+          <div class="pricing-feature"><span class="tick">✓</span> Mobile-First Optimization</div>
+          <div class="pricing-feature"><span class="tick">✓</span> App Integrations & Setup</div>
+        </div>
+        <div class="pricing-divider"></div>
+        <a href="contact.html" class="btn btn-outline" style="width:100%; border-color:var(--border); color:var(--text); justify-content:center;">Get Started</a>
+      </div>
+      <!-- Plan 2 -->
+      <div class="pricing-card featured reveal">
+        <div class="pricing-badge-top">Most Popular</div>
+        <div class="pricing-plan">Marketing</div>
+        <h3 class="pricing-name">Meta Ads Mgmt</h3>
+        <div class="pricing-price">
+          <span class="currency">₹</span>
+          <span class="amount">3999</span>
+          <span class="period">/mo</span>
+        </div>
+        <p class="pricing-desc">Full testing & scaling campaigns.</p>
+        <div class="pricing-features">
+          <div class="pricing-feature"><span class="tick">✓</span> Complete Account Audit</div>
+          <div class="pricing-feature"><span class="tick">✓</span> Product Testing Framework</div>
+          <div class="pricing-feature"><span class="tick">✓</span> Daily Optimization & Scaling</div>
+        </div>
+        <div class="pricing-divider"></div>
+        <a href="contact.html" class="btn btn-gold" style="width:100%; justify-content:center;">Get Started</a>
+      </div>
+      <!-- Plan 3 -->
+      <div class="pricing-card reveal" style="grid-column: 1 / -1; max-width: 410px; margin: 0 auto; width: 100%;">
+        <div class="pricing-plan">Branding</div>
+        <h3 class="pricing-name">Social Media Setup</h3>
+        <div class="pricing-price">
+          <span class="amount" style="font-size:2rem; margin-top:8px;">Custom</span>
+        </div>
+        <p class="pricing-desc">Organic brand building & content strategy tailored to your specific needs.</p>
+        <div class="pricing-divider" style="margin-top:23px;"></div>
+        <a href="contact.html" class="btn btn-outline" style="width:100%; border-color:var(--border); color:var(--text); justify-content:center;">Get Started</a>
+      </div>
+    </div>
+  </div>
+</section>
+"""
+    },
+    "contact.html": {
+        "title": "Contact Us — Tronx Agency",
+        "desc": "Get in touch with Tronx Agency for a free strategy call.",
+        "content": """
+<section class="page-hero">
+  <div class="container">
+    <h1 class="display-lg reveal">Let's Talk Growth</h1>
+    <p class="lead reveal" style="margin:20px auto 0; max-width:600px; transition-delay:0.1s;">
+      Have a project in mind or want to scale your current operations? Reach out and we'll connect within 24 hours.
+    </p>
+  </div>
+</section>
+<section class="section" style="padding-top:0;">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-info reveal-left">
+        <h2>Direct Contact</h2>
+        <p>Book a free consultation call or reach us directly via WhatsApp or email.</p>
+        
+        <a href="https://wa.me/917356567770" class="contact-method">
+          <div class="icon">💬</div>
+          <div class="details">
+            <div class="label">WhatsApp Us</div>
+            <div class="value">+91 7356 567 770</div>
+          </div>
+        </a>
+        <a href="mailto:hello@tronx.agency" class="contact-method">
+          <div class="icon">✉️</div>
+          <div class="details">
+            <div class="label">Email Us</div>
+            <div class="value">hello@tronx.agency</div>
+          </div>
+        </a>
+        
+        <div class="availability">
+          <div class="avail-dot"></div>
+          Accepting new clients this month
+        </div>
+      </div>
+      
+      <div class="contact-form-wrapper reveal-right">
+        <h3 class="form-title">Send a Message</h3>
+        <p class="form-sub">We'll get back to you with a strategy tailored for your brand.</p>
+        <form>
+          <div class="form-group">
+            <label>Name</label>
+            <input type="text" class="form-control" placeholder="Your Name" required>
+          </div>
+          <div class="form-group">
+            <label>Email ID</label>
+            <input type="email" class="form-control" placeholder="your@email.com" required>
+          </div>
+          <div class="form-group">
+            <label>Current Monthly Revenue (Optional)</label>
+            <select class="form-control">
+              <option>Pre-launch / Just Started</option>
+              <option>₹0 - ₹1L</option>
+              <option>₹1L - ₹5L</option>
+              <option>₹5L+</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>How can we help?</label>
+            <textarea class="form-control" placeholder="Tell us about your brand and goals..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-gold" style="width:100%; justify-content:center;">Submit Inquiry →</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+"""
+    }
+}
+
+for filename, data in PAGES.items():
+    html = HEADER.format(title=data["title"], desc=data["desc"]) + data["content"] + FOOTER
+    with open(filename, "w", encoding="utf-8") as f:
+        f.write(html)
